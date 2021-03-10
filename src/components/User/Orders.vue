@@ -4,7 +4,7 @@
       <v-flex xs12 sm6 offset-sm3>
         <h1 class="text--secondary mb-3">Orders</h1>
         <v-list flat subheader three-line>
-          <v-list-item-group v-model="settings" multiple active-class="">
+          <v-list-item-group multiple active-class="active">
             <v-list-item v-for="order in orders" :key="order.id">
               <v-list-item-action>
                 <v-checkbox
