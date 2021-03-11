@@ -3,8 +3,12 @@
     <v-container fluid>
       <v-layout>
         <v-flex xs-12>
-          <v-carousel v-model="model">
-            <v-carousel-item v-for="ad in ads" :key="ad.id" :src="ad.imageSrc">
+          <v-carousel :value="ads">
+            <v-carousel-item
+              v-for="ad in promoAds"
+              :key="ad.id"
+              :src="ad.imageSrc"
+            >
               <div class="car-link">
                 <v-btn class="error" :to="'/ad/' + ad.id">{{ ad.title }}</v-btn>
               </div>
@@ -47,35 +51,11 @@
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 export default {
-  data: () => ({
-    title: "home",
-    model: 0,
-    ads: [
-      {
-        title: "first ad",
-        description: "descr",
-        promo: false,
-        imageSrc: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
-        id: "qqq",
-      },
-      {
-        title: "sec ad",
-        description: "desc  r",
-        promo: false,
-        imageSrc: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
-        id: "qqqa",
-      },
-      {
-        title: "th ad",
-        description: "descr wef dcw",
-        promo: false,
-        imageSrc: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
-        id: "qqqss",
-      },
-    ],
-    colors: ["primary", "secondary", "yellow darken-2", "red", "orange"],
-  }),
+  computed: {
+    ...mapGetters(["ads", "promoAds", "myAds"]),
+  },
 };
 </script>
 <style scoped lang='scss'>

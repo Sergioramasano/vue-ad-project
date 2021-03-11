@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import AuthGuard from "./auth-guard";
 import Login from "../components/Auth/Login";
 import Home from "../components/Home";
 import Registration from "../components/Auth/Registration";
@@ -28,23 +29,28 @@ const routes = [
   },
   {
     path: '/ad/:id',
+    props: true,
     name: 'Ad',
-    component: Ad
+    component: Ad,
+    beforeEnter: AuthGuard
   },
   {
     path: '/list',
     name: 'list',
-    component: AdList
+    component: AdList,
+    beforeEnter: AuthGuard
   },
   {
     path: '/new',
     name: 'NewAd',
-    component: NewAd
+    component: NewAd,
+    beforeEnter: AuthGuard
   },
   {
     path: '/orders',
     name: 'Orders',
-    component: Orders
+    component: Orders,
+    beforeEnter: AuthGuard
   },
 ]
 

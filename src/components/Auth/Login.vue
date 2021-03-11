@@ -43,7 +43,8 @@
                       'blue darken-4 white--text': valid,
                       disabled: !valid,
                     }"
-                    :disabled="!valid"
+                    :disabled="!valid || loading"
+                    :loading="loading"
                     >Login</v-btn
                   >
                   <!-- <a href="">Forgot Password</a> -->
@@ -57,6 +58,8 @@
   </v-container>
 </template>
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   data() {
     return {
@@ -75,20 +78,38 @@ export default {
       ],
     };
   },
+  computed: {
+    ...mapGetters(["loading"]),
+  },
   methods: {
+    ...mapActions(["loginUser", "setError", "setLoading"]),
     submit() {
       if (this.$refs.form.validate()) {
         const user = {
           email: this.email,
           password: this.password,
         };
-        console.log(user);
+
+        this.loginUser(user)
+          .then(() => {
+            this.$router.push("/");
+          })
+          .catch((error) => {
+            this.setError(error.message).then(() => {
+              this.setLoading(false);
+            });
+          });
         this.email = this.password = "";
       }
     },
     clear() {
       this.$refs.form.reset();
     },
+  },
+  created() {
+    if (this.$route.query["loginError"]) {
+      this.$store.dispatch("setError", "Please log in to access this page!!!");
+    }
   },
 };
 </script>

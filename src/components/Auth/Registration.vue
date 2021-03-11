@@ -50,9 +50,10 @@
                   <v-spacer></v-spacer>
                   <v-btn
                     type="submit"
+                    :loading="loading"
                     :class="{
                       'blue darken-4 white--text': valid,
-                      disabled: !valid,
+                      disabled: !valid || loading,
                     }"
                     :disabled="!valid"
                     >Create account</v-btn
@@ -68,6 +69,8 @@
   </v-container>
 </template>
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   data() {
     return {
@@ -92,14 +95,26 @@ export default {
       ],
     };
   },
+  computed: {
+    ...mapGetters(["loading"]),
+  },
   methods: {
+    ...mapActions(["registerUser", "setLoading"]),
     submit() {
       if (this.$refs.form.validate()) {
         const user = {
           email: this.email,
           password: this.password,
         };
-        console.log(user);
+        this.registerUser(user)
+          .then(() => {
+            this.$router.push("/");
+          })
+          .catch((error) => {
+            this.setError(error.message).then(() => {
+              this.setLoading(false);
+            });
+          });
         this.email = this.password = this.confirmPassword = "";
       }
     },

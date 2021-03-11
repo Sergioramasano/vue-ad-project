@@ -27,23 +27,10 @@
             :rules="[(v) => !!v || 'Description is required']"
             required
           ></v-textarea>
-          <v-layout justify-space-between>
-            <v-spacer></v-spacer>
-            <v-btn
-              type="submit"
-              :class="{
-                'blue darken-4 white--text': valid,
-                disabled: !valid,
-              }"
-              :disabled="!valid"
-              >Login</v-btn
-            >
-            <!-- <a href="">Forgot Password</a> -->
-          </v-layout>
         </v-form>
         <v-layout row class="mb-3">
           <v-flex xs12>
-            <v-btn color="warning lighten-2" class="ma-2 white--text">
+            <v-btn color="warning lighten-2" class="mb-3 white--text">
               Upload
               <v-icon right dark> mdi-cloud-upload </v-icon>
             </v-btn>
@@ -81,6 +68,8 @@
   </v-container>
 </template>
 <script>
+import { mapActions } from "vuex";
+
 export default {
   data: () => ({
     title: "",
@@ -89,14 +78,18 @@ export default {
     promo: false,
   }),
   methods: {
+    ...mapActions(["createNewAd"]),
     createAd() {
       if (this.$refs.form.validate()) {
         const ad = {
           title: this.title,
           promo: this.promo,
           description: this.description,
+          imageSrc:
+            "https://media.proglib.io/wp-uploads/2018/07/1_qnI8K0Udjw4lciWDED4HGw.png",
         };
-        console.log(ad);
+        this.createNewAd(ad);
+        this.title = this.promo = this.description = this.imageSrc = "";
       }
     },
   },
