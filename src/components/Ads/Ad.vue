@@ -10,7 +10,7 @@
           <v-card-text>{{ currentAd.description }}</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="warning" depressed>Edit</v-btn>
+            <EditAdModal />
             <v-btn class="success">Buy</v-btn>
           </v-card-actions>
         </v-card>
@@ -20,8 +20,12 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
+import EditAdModal from "./EditAdModal";
 
 export default {
+  components: {
+    EditAdModal,
+  },
   props: ["id"],
   data: () => ({
     title: "ad",
