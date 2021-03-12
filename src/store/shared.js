@@ -26,8 +26,6 @@ export default {
         },
     },
     getters: {
-        // ads: (state) => state.ads,
-        // promoAds: (state) => state.ads.filter(ad => ad.promo),
         loading: (state) => state.loading,
         error: (state) => state.error,
     },

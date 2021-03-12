@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!loading">
     <v-container fluid>
       <v-layout>
         <v-flex xs-12>
@@ -49,12 +49,26 @@
       </v-layout>
     </v-container>
   </div>
+  <div v-else>
+    <v-container>
+      <v-layout row>
+        <v-flex xs12 class="text-center pt-5">
+          <v-progress-circular
+            :size="170"
+            :width="4"
+            color="purple"
+            indeterminate
+          ></v-progress-circular>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
 export default {
   computed: {
-    ...mapGetters(["ads", "promoAds", "myAds"]),
+    ...mapGetters(["ads", "promoAds", "myAds", "loading"]),
   },
 };
 </script>
@@ -65,7 +79,7 @@ export default {
   left: 50%;
   background: rgba(0, 0, 0, 0.5);
   transform: translate(-50%, 0);
-  padding: 5px 15px;
+  padding: 15px;
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
 }

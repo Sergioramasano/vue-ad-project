@@ -130,6 +130,8 @@ export default {
         this.autoLoginUser(user);
       }
     });
+
+    this.$store.dispatch("fetchAds");
   },
 };
 </script>

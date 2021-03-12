@@ -1,8 +1,8 @@
 import firebase from 'firebase';
 
 class User {
-    constructor(id) {
-        this.id = id;
+    constructor(uid) {
+        this.id = uid;
     }
 }
 
@@ -38,7 +38,7 @@ export default {
             commit('setLoading', true)
             const user = await firebase.auth().createUserWithEmailAndPassword(email, password)
             try {
-                commit('setUser', new User(user.uid))
+                commit('setUser', new User(user.user.uid))
                 commit('setLoading', false)
             } catch (e) {
                 commit('setError', null)
@@ -51,8 +51,9 @@ export default {
             commit('setLoading', true)
             const user = await firebase.auth().signInWithEmailAndPassword(email, password)
             try {
-                commit('setUser', new User(user.uid))
+                commit('setUser', new User(user.user.uid))
                 commit('setLoading', false)
+
             } catch (e) {
                 commit('setError', null)
                 commit('setLoading', false)

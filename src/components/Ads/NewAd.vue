@@ -30,19 +30,26 @@
         </v-form>
         <v-layout row class="mb-3">
           <v-flex xs12>
-            <v-btn color="warning lighten-2" class="mb-3 white--text">
+            <v-btn
+              @click="triggerUpload"
+              color="warning lighten-2"
+              class="mb-3 white--text"
+            >
               Upload
               <v-icon right dark> mdi-cloud-upload </v-icon>
             </v-btn>
+            <input
+              ref="fileInput"
+              type="file"
+              style="display: none"
+              accept="image/*"
+              @change="onFileChange"
+            />
           </v-flex>
         </v-layout>
         <v-layout row class="mb-3">
           <v-flex xs12>
-            <img
-              src="https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg"
-              height="150"
-              alt="preview"
-            />
+            <img v-if="imageSrc" :src="imageSrc" height="150" alt="preview" />
           </v-flex>
         </v-layout>
         <v-layout row class="mb-3">
@@ -58,7 +65,11 @@
         <v-layout row class="mb-3">
           <v-flex xs12>
             <v-spacer></v-spacer>
-            <v-btn :disabled="!valid" class="success" @click="createAd"
+            <v-btn
+              :disabled="(!valid && !image) || loading"
+              :loading="loading"
+              class="success"
+              @click="createAd"
               >Create ad</v-btn
             >
           </v-flex>
@@ -68,7 +79,7 @@
   </v-container>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   data: () => ({
@@ -76,19 +87,38 @@ export default {
     description: "",
     valid: false,
     promo: false,
+    image: null,
+    imageSrc: "",
   }),
+  computed: {
+    ...mapGetters(["loading"]),
+  },
   methods: {
     ...mapActions(["createNewAd"]),
+    triggerUpload() {
+      this.$refs.fileInput.click();
+    },
+    onFileChange(e) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        this.imageSrc = reader.result;
+        console.log(event);
+      };
+      reader.readAsDataURL(file);
+      this.image = file;
+    },
     createAd() {
-      if (this.$refs.form.validate()) {
+      if (this.$refs.form.validate() && this.image) {
         const ad = {
           title: this.title,
           promo: this.promo,
           description: this.description,
-          imageSrc:
-            "https://media.proglib.io/wp-uploads/2018/07/1_qnI8K0Udjw4lciWDED4HGw.png",
+          image: this.image,
         };
-        this.createNewAd(ad);
+        this.createNewAd(ad).then(() => {
+          this.$router.push("/list");
+        });
         this.title = this.promo = this.description = this.imageSrc = "";
       }
     },
