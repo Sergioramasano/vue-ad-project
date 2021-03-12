@@ -10,7 +10,7 @@
           <v-card-text>{{ currentAd.description }}</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <EditAdModal />
+            <EditAdModal v-if="currentAd" :ad="currentAd" />
             <v-btn class="success">Buy</v-btn>
           </v-card-actions>
         </v-card>

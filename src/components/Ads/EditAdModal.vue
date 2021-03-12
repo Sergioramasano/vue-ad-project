@@ -16,7 +16,20 @@
 
         <v-layout row>
           <v-flex xs12>
-            <v-card-text> Lorem ipsum dolor sit. </v-card-text>
+            <v-card-text>
+              <v-text-field
+                label="editTitle"
+                v-model.trim="editTitle"
+                required
+                type="text"
+              ></v-text-field>
+              <v-text-field
+                label="editDescription"
+                v-model.trim="editDescription"
+                required
+                type="text"
+              ></v-text-field>
+            </v-card-text>
           </v-flex>
         </v-layout>
 
@@ -24,8 +37,8 @@
           <v-flex xs12>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn class="warning">Cancel</v-btn>
-              <v-btn class="success">Save</v-btn>
+              <v-btn @click="onCancel" class="warning">Cancel</v-btn>
+              <v-btn @click="onSave" class="success">Save</v-btn>
             </v-card-actions>
           </v-flex>
         </v-layout>
@@ -35,9 +48,36 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
-  data: () => ({
-    modal: false,
-  }),
+  props: ["ad"],
+  data() {
+    return {
+      modal: false,
+      editTitle: this.ad.title,
+      editDescription: this.ad.description,
+    };
+  },
+  methods: {
+    ...mapActions(["updateAd"]),
+    onCancel() {
+      this.editTitle = this.ad.title;
+      this.editDescription = this.ad.description;
+      this.modal = false;
+    },
+    onSave() {
+      if (this.editTitle !== "" && this.editDescription !== "") {
+        let updateData = {
+          title: this.editTitle,
+          description: this.editDescription,
+          id: this.ad.id,
+        };
+        this.updateAd(updateData);
+
+        this.modal = false;
+      }
+    },
+  },
 };
 </script>
